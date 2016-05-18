@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block Main %}
+<div class="jumbotron">
+    <div id="jumbotron_description" class="container">
+        <h1>{% if species %}<span class="latin">{{species.name}}</span>{% else %}All Data{% endif %}</h1>
+        <p>
+            type: {{request.GET.type}}&nbsp;&nbsp;
+            query: {{request.GET.query}}
+        </p>
+    </div>
+</div>
+<div class="container">
+{% ifequal request.GET.type 'assembly' %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Species</th>
+                <th>Scaffold</th>
+                <th>Length</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if not paginator.object_list.count %}
+            <tr>
+                <td>No Data!</td>
+            </tr>
+        {% else %}
+            {% for assembly in paginator.object_list %}
+            <tr>
+                <td>{{assembly.species}}</td>
+                <td>{{assembly.scaffold}}</td>
+                <td>{{assembly.length}}</td>
+            </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+{% endifequal %}
+{% ifequal request.GET.type 'gene' %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Species</th>
+                <th>Gene ID</th>
+                <th>Alias Name</th>
+                <th>Scaffold</th>
+                <th>Start</th>
+                <th>End</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if not paginator.object_list.count %}
+            <tr>
+                <td>No Data!</td>
+            </tr>
+        {% else %}
+            {% for gene in paginator.object_list %}
+            <tr>
+                <td>{{gene.assembly.species}}</td>
+                <td><a href="/database/gene?id={{gene.id}}">{{gene.name}}</a></td>
+                <td>{{gene.alias}}</td>
+                <td>{{gene.assembly.scaffold}}</td>
+                <td>{{gene.start}}</td>
+                <td>{{gene.end}}</td>
+            </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+{% endifequal %}
+{% ifequal request.GET.type 'annotation' %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Source</th>
+                <th>Feature</th>
+                <th>Gene</th>
+                <th>Gene Alias</th>
+                <th>Start</th>
+                <th>End</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if not paginator.object_list.count %}
+            <tr>
+                <td>No Data!</td>
+            </tr>
+        {% else %}
+            {% for annotation in paginator.object_list %}
+            <tr>
+                <td>{{annotation.source}}</td>
+                <td>{{annotation.feature}}</td>
+                <td>{{annotation.gene.name}}</td>
+                <td>{{annotation.gene.alias}}</td>
+                <td>{{annotation.start}}</td>
+                <td>{{annotation.end}}</td>
+            </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+{% endifequal %}
+{% if request.GET.type == 'news' or request.GET.type == 'publ'%}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Species</th>
+                <th>title</th>
+                <th>date</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if not paginator.object_list.count %}
+            <tr>
+                <td>No Data!</td>
+            </tr>
+        {% else %}
+            {% for news in paginator.object_list %}
+            <tr>
+                <td>{{news.species.name}}</td>
+                <td>{{news.title}}</td>
+                <td>{{news.date}}</td>
+            </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+{% endif %}
+</div>
+
+{% endblock %}

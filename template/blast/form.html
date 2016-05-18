@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block Main %}
+<div class="jumbotron">
+    <div id="jumbotron_description" class="container">
+        <h1>BLAST SEARCH</h1>
+    </div>
+</div>
+
+<div class="container">
+    <form class="form-group" method="post" enctype="multipart/form-data" action="/blast/species/{{species.code}}">
+    {% csrf_token %}
+        <div class="row">
+            <h3 class="page-header"><i class="fa fa-star">Base Parameters</i></h3>
+            <div class="form-group col-xs-6">
+                <label for="id_tool" class="control-label">{{blastform.tool.label}}</label>
+                <div>
+                    {{ blastform.tool }}
+                    {{ blastform.tool.errors }}
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="id_tool" class="control-label">{{blastform.database.label}}</label>
+                <p class="form-control-static"><span class="latin">{{species.name}}</span></p>
+                {{ blastform.database.errors }}
+                <div class="sr-only">
+                    {{ blastform.database }}
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <label for="id_query" class="control-label">{{blastform.query.label}}</label>
+                {{ blastform.query }}
+                {{ blastform.query.errors }}
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="id_query_file" class="control-label">Or load it from disk</label>
+                {{ blastform.query_file }}
+                {{ blastform.query_file.errors }}
+            </div>
+            <div class="form-group col-xs-12">
+                <button class="btn btn-default" type="button" id="clear_query">Clear</button>
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+        </div>
+        <div class="row">
+            <h3 class="page-header"><i class="fa fa-star">Advance Settings</i></h3>
+            <div class="form-group col-xs-6">
+                <label for="id_evalue" class="control-label">{{blastform.evalue.label}}</label>
+                {{ blastform.evalue }}
+                {{ blastform.evalue.errors }}
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="id_alignments" class="control-label">{{blastform.alignments.label}}</label>
+                {{ blastform.alignments }}
+                {{ blastform.alignments.errors }}
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="id_outfmt" class="control-label">{{blastform.outfmt.label}}</label>
+                <div>
+                    {{ blastform.outfmt }}
+                    {{ blastform.outfmt.errors }}
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="id_other" class="control-label">{{blastform.other.label}}</label>
+                <div>
+                    {{ blastform.other }}
+                    {{ blastform.other.errors }}
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+
+</script>

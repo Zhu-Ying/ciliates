@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block Main %}
+<div class="jumbotron">
+    <div id="jumbotron_description" class="container">
+        <h2 class="text-center">Genome Browser</h2>
+        <form class="form-group" method="post" action="/database/genome/{{species.code}}">
+        {% csrf_token %}
+            <div class="form-group">
+                <div class="col-md-7 col-sm-8 col-md-offset-2 col-sm-offset-2 col-xs-10">
+                    {{ form.query }}
+                    {{ form.query.errors }}
+                </div>
+                <div class="col-md-3 col-sm-2 col-xs-2 text-left">
+                    <button class="btn btn-default" type="submit">SUBMIT</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="jbrowse">
+    <div class="container">
+        <div class="col-xs-12">
+            <iframe src="{{jbrowse_url}}" frameborder="0"></iframe>
+        </div>
+    </div>
+</div>
+{% endblock %}

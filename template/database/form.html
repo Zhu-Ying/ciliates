@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block Main %}
+<div class="jumbotron">
+    <div id="jumbotron_description" class="container">
+        <form class="form-group" method="post" action="/database/search{% if species %}/{{species.code}}{% endif %}">
+        {% csrf_token %}
+            <div class="form-group">
+                <div class="col-md-7 col-sm-8 col-xs-10">
+                    {{ form.query }}
+                    {{ form.query.errors }}
+                </div>
+                <div class="col-md-5 col-sm-4 col-xs-2 text-left">
+                    <button class="btn btn-default" type="submit">SUBMIT</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="container" id="search_result">
+    <div class="row">
+        <div class="col-sm-9 col-md-8 col-xs-12">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span class="badge">{{search_result.assemblys}}</span>
+                    <a href="/database/list?species={{species.id}}&type=assembly&query={{request.POST.query}}">Assembly</a>
+                </li>
+                <li class="list-group-item">
+                    <span class="badge">{{search_result.genes}}</span>
+                    <a href="/database/list?species={{species.id}}&type=gene&query={{request.POST.query}}">Gene</a>
+                </li>
+                <li class="list-group-item">
+                    <span class="badge">{{search_result.annotations}}</span>
+                    <a href="/database/list?species={{species.id}}&type=annotation&query={{request.POST.query}}">Annotation</a>
+                </li>
+                <li class="list-group-item">
+                    <span class="badge">{{search_result.blogs}}</span>
+                    <a href="/database/list?species={{species.id}}&type=blog&query={{request.POST.query}}">Blog</a>
+                </li>
+                <li class="list-group-item">
+                    <span class="badge">{{search_result.newses}}</span>
+                    <a href="/database/list?species={{species.id}}&type=news&query={{request.POST.query}}">News</a>
+                </li>
+                <li class="list-group-item">
+                    <span class="badge">{{search_result.publications}}</span>
+                    <a href="/database/list?species={{species.id}}&type=publ&query={{request.POST.query}}">Publication</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+</script>

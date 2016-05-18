@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block Main %}
+<div class="jumbotron">
+    <div id="jumbotron_description" class="container">
+        <h1>{{gene.name}} ({{gene.alias}})</h1>
+        <div class="col-xs-6">
+            <p>species: {{gene.assembly.species.name}}</p>
+            <p>scaffold: {{gene.assembly.scaffold}}</p>
+            <p>blast annotaiton: {{gene.blast_anno}}</p>
+        </div>
+        <div class="col-xs-6">
+            <p>genome browser:
+                <a href="/static/JBrowse/index.html?data=sample/json/{{gene.assembly.species.code}}&loc={{gene.assembly.scaffold}}:{{gene.start}}..{{gene.end}}" class="text-danger">
+                <i class="fa fa-align-justify"></i>
+                </a>
+            </p>
+            <p>scaffold: {{gene.assembly.scaffold}}</p>
+            <p>blast annotaiton: {{gene.blast_anno}}</p>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+        <h3 class="page-header">Struct</h3>
+            <div class="progress">
+                {% for struct in gene.Gene_Struct.all %}
+                <div class="progress-bar 
+                    {% ifequal struct.function 'exon' %}
+                        progress-bar-success
+                    {% else %}
+                        progress-bar-info
+                    {% endifequal %}
+                    " 
+                style="width:{{struct.percent}}%">
+                    <span>{{struct.function}}</span>
+                    <span class="sr-only">{{struct.percent}}% {{struct.function}}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="page-header">InterproScan</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>InterproscanID</th>
+                        <th>Annotation</th>
+                        <th>GO</th>
+                        <th>Start</th>
+                        <th>End</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for anno in gene.Gene_Annotation.all %}
+                    {% if anno.interproscan %}
+                    <tr>
+                        <td>{{anno.interproscan.code}}</td>
+                        <td>{{anno.interproscan.description}}</td>
+                        <td>{{anno.interproscan.GO}}</td>
+                        <td>{{anno.start}}</td>
+                        <td>{{anno.end}}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="page-header">Annotation</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Source</th>
+                        <th>Feature</th>
+                        <th>Description</th>
+                        <th>Start</th>
+                        <th>End</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for anno in gene.Gene_Annotation.all %}
+                    <tr>
+                        <td>{{anno.source}}</td>
+                        <td>{{anno.feature}}</td>
+                        <td>{{anno.description}}</td>
+                        <td>{{anno.start}}</td>
+                        <td>{{anno.end}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="page-header">Sequence</h3>
+            <p style="word-break:break-all;font-family:'DejaVu Sans Mono'" class="latin bs-callout">
+              >{{gene.name}}(CDS)<br>
+              {{gene.Gene_Transcript.seqNA}}  
+            </p>
+            <p style="word-break:break-all;font-family:'DejaVu Sans Mono'" class="latin bs-callout">
+              >{{gene.name}}(PEP)<br>
+              {{gene.Gene_Transcript.seqAA}}  
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,7 @@
+Django==1.8
+django-ckeditor==5.0.3
+django-simple-captcha==0.5.1
+itsdangerous==0.24
+Pillow==3.2.0
+six==1.10.0
+xlrd==0.9.4
