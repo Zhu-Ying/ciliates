@@ -2,9 +2,11 @@
 from django.db import models
 from django.db.models import Q
 from django.http import HttpResponse,HttpResponseRedirect
+from django.core.servers.basehttp import FileWrapper
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
-import WebSite.settings
+import WebSite.settings, os, mimetypes, json, time
+from Bio.Blast import NCBIXML
 # Create your models here.
 
 from Database import models as DatabaseModels
@@ -49,12 +51,36 @@ class Blast(models.Model):
     def __str__(self):
         return "%s:%s:%s" % (self.tool, self.database.species.name, self.id)
     def subject(self):
-        if tool in ('blastn', 'tblastn', 'tblastx'):
+        if self.tool in ('blastn', 'tblastn', 'tblastx'):
             return self.database.assembly.path
         else:
             return self.database.protein.path
+    def outfile(self):
+        return {
+            "text":"%s/blast/blast.%d.out.txt" % (WebSite.settings.MEDIA_ROOT, self.id),
+            "xml":"%s/blast/blast.%d.out.xml" % (WebSite.settings.MEDIA_ROOT, self.id),
+        }
     def run(self):
-        outfile = "%s/blast/blast.%d.out" % (WebSite.settings.MEDIA_ROOT, self.id)
-        command = '%s %s %s'
-
+        #'%s/blast/bin/%s -query %s -db %s -out %s -evalue %f -outfmt %d -num_alignments %d %s' % (WebSite.settings.SOFT_DIR, self.tool, self.query_file.path, self.subject(), self.outfile(), self.evalue, self.outfmt, self.alignments, self.other)
+        outfile = 
+        command_base = '%s/blast/bin/%s -query %s -db %s -evalue %f -num_alignments %d %s' % (WebSite.settings.SOFT_DIR, self.tool, self.query_file.path, self.subject(), self.evalue, self.alignments, self.other)
+        command_text = "%s -out %s -outfmt %d" % (command_base, self.outfile()['text'], self.outfmt)
+        command_xml = "%s -out %s -outfmt %d" % (command_base, self.outfile()['xml'], 5)
+        os.system(command_text)
+        os.system(command_xml)
+    def parse():
+        outfile = self.outfile()['xml']
+        if os.path.exists(outfile):
+            return NCBIXML.parse(open(outfile,'r'))
+        else:
+            None
+    def download(self):
+        outfile = self.outfile()['text']
+        if os.path.exists(outfile):
+            wrapper = FileWrapper(open(outfile,'rb'))
+            response = HttpResponse(wrapper, content_type = mimetypes.guess_type(outfile)[0])
+            response['Content-Length'] = os.path.getsize(outfile)
+            response['Content-Disposition'] = 'attachment; filename=%s' % (os.path.basename(outfile),)
+            return response
+        return None 
 

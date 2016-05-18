@@ -109,12 +109,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 STATIC_URL = '/static/'
-STATIC_DIR = HOME_DIR+"/static/"
+STATIC_DIR = HOME_DIR+"/static"
 STATICFILES_DIRS = [ STATIC_DIR, ]
 
-MEDIA_ROOT = STATIC_DIR+"/media/"
-# Blast Directory
-JBROWSE_DIR = HOME_DIR+"/app/JBrowse/"
+MEDIA_ROOT = STATIC_DIR+"/media"
+# Sotfware Directory
+SOFT_DIR = HOME_DIR+"/app"
+JBROWSE_DIR = HOME_DIR+"/JBrowse"
 
 #ckedtor配置
 CKEDITOR_UPLOAD_PATH = "images"

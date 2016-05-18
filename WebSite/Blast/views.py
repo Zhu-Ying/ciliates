@@ -24,8 +24,8 @@ def BlastSpeciesView(request,species_code):
             if blastform.is_valid():
 
                 blast = blastform.newsave()
-                #blast.run()
-                return HttpResponseRedirect('/blast/result?id='+str(blast.id))
+                blast.run()
+                return HttpResponseRedirect('/blast/result/view?id='+str(blast.id))
         else:
             blastform = BlastForm(
                 initial={
@@ -35,5 +35,31 @@ def BlastSpeciesView(request,species_code):
         context = RequestContext(request,{"species":species, "blastform":blastform, "form":DatabaseForms.SearchForm()})
         template = loader.get_template("blast/form.html")
         return HttpResponse(template.render(context))
+def ResultView(request, type_):
+    try:
+        blast = Blast.objects.get(id=request.GET.get('id'))
+    except:
+        raise Http404("error link")
+    else:
+        if type_ == "view":
+            blast_records = blast.parse()
+            if blast_records:
+                context = RequestContext(
+                    request,{
+                        "species":species,
+                        "form":DatabaseForms.SearchForm(),
+                        "blast_records":blast_records
+                    }
+                )
+                template = loader.get_template("blast/form.html")
+                return HttpResponse(template.render(context))
+            else:
+                raise Http404("no such file, please rerun the blast")
+        else:
+            download = blast.download()
+            if download:
+                return download
+            else:
+                raise Http404("no such file, please rerun the blast")
 
         
