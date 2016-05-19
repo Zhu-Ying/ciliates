@@ -27,7 +27,6 @@
 
 <header>
 <a id="top"></a>
-{% if species %}
 <nav class="navbar navbar-default navbar-mine">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -41,7 +40,8 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="/grandbox/home">
-                <i class="latin">{{species.name}}</i>
+                <img src="/static/img/logo.png" alt="">
+                    CGS : Ciliate Genomics Space
             </a>
         </div>
 
@@ -76,74 +76,6 @@
     </div>
     </div>
 </nav>
-{% else %}
-<nav class="navbar navbar-default navbar-mine">
-    <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/grandbox/home">
-                <img src="/static/img/logo.png" alt="">
-            </a>
-        </div>
-
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav nav-success">
-                <li>
-                    <a href="/database/home">HOME</a>
-                </li>
-                <li role="presentation" class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">DATABASE<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        {% for species in Species%}
-                        <li>
-                            <a href="/database/species/{{species.code}}" target="_blank" class="latin">
-                                {{species.name}}
-                            </a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-                <li role="presentation">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">TOOL<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="/blast/home">
-                                BLAST
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/blast/home">
-                                GENOME BROWSE
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li role="presentation">
-                    <a href="#">TAXONOMY&MORPHOLOGY</a>
-                </li>
-                <li role="presentation">
-                    <a href="#">ABOUT</a>
-                </li>
-            </ul>
-            <form  class="navbar-form navbar-right" role="search" action="/database/search/{{species.code}}" method="post">
-            {% csrf_token %}
-                <div class="form-group">
-                    {{form.query}}
-                </div>
-                <button class="btn btn-default btn-sm" type="submit">SUBMIT</button>
-            </form>
-        </div>
-    </div>
-</nav>
-{% endif %}
 </header>
 
 

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block Main %}
+<div class="jumbotron">
+    <div id="jumbotron_description" class="container">
+        <h2>BLAST SEARCH</h2>
+        <p class="col-xs-8">
+            {% for param in blast.params %}
+            {{param.name}} : {{param.value}}<br>
+            {% endfor %}
+        </p>
+        <p class="col-xs-4">
+            <a href="/blast/result/download?id={{blast.id}}" class="btn btn-default">
+                <i class="fa fa-download">DOWNLOAD</i>
+            </a>
+        </p>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+        {% for blast_record in blast_records %}
+            {% for alignment in blast_record.alignments %}
+                {% for hsp in alignment.hsps%}
+                <div style="word-break:break-all;font-family:'DejaVu Sans Mono'" class="bs-callout">
+                    <p>
+                        ****Alignment****,
+                        sequence:'{{alignment.title}}',
+                        length:{{alignment.length}},
+                        evalue:{{hsp.expect}}
+                    </p>
+                    <p>{{hsp.query}}</p>
+                    <p>{{hsp.match}}</p>
+                    <p>{{hsp.sbjct}}</p>
+                </div>
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -14,12 +14,13 @@
     border-radius: 3px;
 }
 .navbar-form{ margin-top: 15px; }
+.table > tbody > tr > td, .table > tbody > tr > th, .table > thead > tr > th{ line-height:2 }
 
 /* 导航基本样式及大小 */
 /*.navbar-mine{background-color:#fff ;border-color:#e8e8e8; margin-bottom: -1px; z-index:99}*/
 .navbar-mine{background-color:#fff; border:none; margin-bottom:0px; padding-top:5px;}
 .navbar-mine > .container .navbar-brand{ line-height:30px; }
-.navbar-mine .navbar-brand img{ height: 32px; margin-top: -7px;}
+.navbar-mine .navbar-brand img{ height: 40px; margin-top: -7px;}
 .navbar-mine .navbar-brand:focus, .navbar-mine .navbar-brand:hover{color:#1E8CE5; background-color:transparent}
 .navbar-mine .navbar-text{color:#444444;}
 .navbar-mine .navbar-nav>li>a{color:#444444; border-bottom:solid 4px #fff; text-align:center; font-size:12px; line-height: 30px;}

@@ -60,15 +60,22 @@ class Blast(models.Model):
             "text":"%s/blast/blast.%d.out.txt" % (WebSite.settings.MEDIA_ROOT, self.id),
             "xml":"%s/blast/blast.%d.out.xml" % (WebSite.settings.MEDIA_ROOT, self.id),
         }
+    def params(self):
+        return (
+            {"name":"tool", "value":self.tool},
+            {"name":"species", "value":self.database.species.name},
+            {"name":"evalue", "value":self.evalue},
+            {"name":"num_alignments", "value":self.alignments},
+            {"name":"other", "value":self.other}
+        )
     def run(self):
         #'%s/blast/bin/%s -query %s -db %s -out %s -evalue %f -outfmt %d -num_alignments %d %s' % (WebSite.settings.SOFT_DIR, self.tool, self.query_file.path, self.subject(), self.outfile(), self.evalue, self.outfmt, self.alignments, self.other)
-        outfile = 
         command_base = '%s/blast/bin/%s -query %s -db %s -evalue %f -num_alignments %d %s' % (WebSite.settings.SOFT_DIR, self.tool, self.query_file.path, self.subject(), self.evalue, self.alignments, self.other)
         command_text = "%s -out %s -outfmt %d" % (command_base, self.outfile()['text'], self.outfmt)
         command_xml = "%s -out %s -outfmt %d" % (command_base, self.outfile()['xml'], 5)
         os.system(command_text)
         os.system(command_xml)
-    def parse():
+    def parse(self):
         outfile = self.outfile()['xml']
         if os.path.exists(outfile):
             return NCBIXML.parse(open(outfile,'r'))

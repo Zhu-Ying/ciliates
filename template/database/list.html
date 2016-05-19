@@ -127,5 +127,49 @@
     </table>
 {% endif %}
 </div>
-
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            <nav>
+                <ul class="pagination">
+                    <li>
+                        <a  href="?page=1&species={{species.id}}&type={{request.GET.type}}&query={{request.GET.query}}">First</a>
+                    </li>
+                    {% if paginator.has_previous %}
+                    <li>
+                        <a href="?page={{paginator.previous_page_number}}&species={{species.id}}&type={{request.GET.type}}&query={{request.GET.query}}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;Previous</span>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="disabled">
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;Previous</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a>{{paginator.number}}/{{paginator.paginator.num_pages}}</a>
+                    </li>
+                    {% if paginator.has_next %}
+                    <li>
+                        <a href="?page={{paginator.next_page_number}}&species={{species.id}}&type={{request.GET.type}}&query={{request.GET.query}}" aria-label="Next">
+                            <span aria-hidden="true">Next&raquo;</span>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="disabled">
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">Next&raquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a  href="?page={{paginator.paginator.num_pages}}&species={{species.id}}&type={{request.GET.type}}&query={{request.GET.query}}">Last</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
 {% endblock %}

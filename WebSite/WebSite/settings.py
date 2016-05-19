@@ -115,7 +115,7 @@ STATICFILES_DIRS = [ STATIC_DIR, ]
 MEDIA_ROOT = STATIC_DIR+"/media"
 # Sotfware Directory
 SOFT_DIR = HOME_DIR+"/app"
-JBROWSE_DIR = HOME_DIR+"/JBrowse"
+JBROWSE_DIR = SOFT_DIR+"/JBrowse"
 
 #ckedtor配置
 CKEDITOR_UPLOAD_PATH = "images"

@@ -9,7 +9,11 @@ from django.core.paginator import Paginator,InvalidPage,EmptyPage,PageNotAnInteg
 import os,sys
 from .models import *
 from .forms import *
-
+def HomeView(request):
+    form = SearchForm()
+    template = loader.get_template("database/home.html")
+    context = RequestContext(request,{"form":form, "Species":Species.objects.all(),})
+    return HttpResponse(template.render(context))
 def SpeciesView(request,species_code):
     try:
         species = Species.objects.get(code=species_code)
@@ -18,9 +22,8 @@ def SpeciesView(request,species_code):
     else:
         form = SearchForm()
         template = loader.get_template("database/home.html")
-        context = RequestContext(request,{"species":species, "form":form})
+        context = RequestContext(request,{"species":species, "form":form, "Species":Species.objects.all(),})
         return HttpResponse(template.render(context))
-
 def SearchView(request, species_code):
     try:
         species = Species.objects.get(code=species_code)
@@ -30,7 +33,7 @@ def SearchView(request, species_code):
         form = SearchForm(request.POST)
         if form.is_valid():
             search_result = form.save(species)
-            context = RequestContext(request,{"species":species, "form":form, "search_result":search_result})
+            context = RequestContext(request,{"species":species, "form":form, "search_result":search_result, "Species":Species.objects.all(),})
         else:
             context = RequestContext(request,{"species":species, "form":form})
         template = loader.get_template("database/form.html")
@@ -49,7 +52,7 @@ def ListView(request):
         form = SearchForm(request.GET)
         if form.is_valid():
             paginator = form.search_list(type_=type_, page=page, species=species)
-            context = RequestContext(request,{"species":species, "form":form, "paginator":paginator})
+            context = RequestContext(request,{"species":species, "form":form, "paginator":paginator, "Species":Species.objects.all(),})
             template = loader.get_template("database/list.html")
             return HttpResponse(template.render(context))
     raise Http404("error link")
@@ -61,7 +64,7 @@ def GeneView(request):
         raise Http404("error link")
     else:
         form = SearchForm()
-        context = RequestContext(request,{"gene":gene, "species":gene.assembly.species, "form":form})
+        context = RequestContext(request,{"gene":gene, "species":gene.assembly.species, "form":form, "Species":Species.objects.all(),})
         template = loader.get_template("database/gene.html")
         return HttpResponse(template.render(context))
 
@@ -79,7 +82,7 @@ def GenomeView(request, species_code):
         else:
             form = JBbrowseForm(species)
         template = loader.get_template("database/genome.html")
-        context = RequestContext(request,{"species":species, "form":form, "jbrowse_url":jbrowse_url})
+        context = RequestContext(request,{"species":species, "form":form, "jbrowse_url":jbrowse_url, "Species":Species.objects.all(),})
         return HttpResponse(template.render(context))
 
 

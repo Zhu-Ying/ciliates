@@ -12,6 +12,19 @@ from Database import forms as DatabaseForms
 from .models import *
 from .forms import *
 
+def BlastHomeView(request):
+    if request.POST:
+        blastform = BlastForm(request.POST, request.FILES)
+        if blastform.is_valid():
+            blast = blastform.newsave()
+            blast.run()
+            return HttpResponseRedirect('/blast/result/view?id=%d' % (blast.id,))
+    else:
+        blastform = BlastForm()
+    context = RequestContext(request,{"blastform":blastform, "form":DatabaseForms.SearchForm(), "Species":DatabaseModels.Species.objects.all(),})
+    template = loader.get_template("blast/form.html")
+    return HttpResponse(template.render(context))
+
 def BlastSpeciesView(request,species_code):
     try:
         species = DatabaseModels.Species.objects.get(code=species_code)
@@ -25,7 +38,7 @@ def BlastSpeciesView(request,species_code):
 
                 blast = blastform.newsave()
                 blast.run()
-                return HttpResponseRedirect('/blast/result/view?id='+str(blast.id))
+                return HttpResponseRedirect('/blast/result/view?id=%d&sp=%d' % (blast.id, species.id))
         else:
             blastform = BlastForm(
                 initial={
@@ -37,6 +50,10 @@ def BlastSpeciesView(request,species_code):
         return HttpResponse(template.render(context))
 def ResultView(request, type_):
     try:
+        species = DatabaseModels.Species.objects.get(id=request.GET.get('sp'))
+    except:
+        species = None
+    try:
         blast = Blast.objects.get(id=request.GET.get('id'))
     except:
         raise Http404("error link")
@@ -47,19 +64,20 @@ def ResultView(request, type_):
                 context = RequestContext(
                     request,{
                         "species":species,
+                        "blast":blast,
                         "form":DatabaseForms.SearchForm(),
                         "blast_records":blast_records
                     }
                 )
-                template = loader.get_template("blast/form.html")
+                template = loader.get_template("blast/result.html")
                 return HttpResponse(template.render(context))
             else:
-                raise Http404("no such file, please rerun the blast")
+                raise Http404("no xml file, please rerun the blast")
         else:
             download = blast.download()
             if download:
                 return download
             else:
-                raise Http404("no such file, please rerun the blast")
+                raise Http404("no text file, please rerun the blast")
 
         
